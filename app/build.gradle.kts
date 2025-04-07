@@ -1,19 +1,17 @@
 plugins {
-    alias(libs.plugins.android.application)
+    id("com.android.library")
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
 }
+apply(plugin = "maven-publish") // <-- bu önemli!
 
 android {
     namespace = "com.emin.supermusic"
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "com.emin.supermusic"
         minSdk = 24
         targetSdk = 35
-        versionCode = 1
-        versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -38,6 +36,19 @@ android {
         compose = true
     }
 }
+afterEvaluate {
+    configure<PublishingExtension> {
+        publications {
+            create<MavenPublication>("release") {
+                from(components["release"])
+                groupId = "com.github.emin-git"
+                artifactId = "SuperMusic"
+                version = "1.0.1"
+            }
+        }
+    }
+}
+
 
 dependencies {
 
